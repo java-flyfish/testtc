@@ -9,6 +9,7 @@ import com.test.tc.ware.entity.WareSkuEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -31,10 +32,12 @@ public class WareServiceImpl implements WareService {
         return true;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean decrementSkuStock(DecrementSkuStockDto dto) {
 
         Integer i = wareSkuDao.decrementSkuStock(dto);
+        int a = 1/0;
         if (i<1){
             throw new BaseAppException("30001","库存不足");
         }

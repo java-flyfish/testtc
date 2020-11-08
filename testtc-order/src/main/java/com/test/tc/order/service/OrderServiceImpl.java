@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
 
     @GlobalTransactional
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean creatrOrder(CreateOrderDto dto) {
 
@@ -90,14 +90,19 @@ public class OrderServiceImpl implements OrderService {
         IncrementSkuSaleDto incrementSkuSaleDto = new IncrementSkuSaleDto();
         incrementSkuSaleDto.setSkuId(dto.getSkuId());
         incrementSkuSaleDto.setAmount(dto.getAmount());
-        productFeginClient.incrementSkuSale(incrementSkuSaleDto);
+        Result<Boolean> incrementSkuSaleResult = productFeginClient.incrementSkuSale(incrementSkuSaleDto);
+        if (!incrementSkuSaleResult.getSuccess()){
+            throw new BaseAppException("20002","商品已售增加失败");
+        }
 
         //sku扣减库存
         DecrementSkuStockDto decrementSkuStockDto = new DecrementSkuStockDto();
         decrementSkuStockDto.setSkuId(dto.getSkuId());
         decrementSkuStockDto.setAmount(dto.getAmount());
-        wareFeginClient.decrementSkuStock(decrementSkuStockDto);
-
+        Result<Boolean> decrementSkuStockResult = wareFeginClient.decrementSkuStock(decrementSkuStockDto);
+        if (!decrementSkuStockResult.getSuccess()){
+            throw new BaseAppException("20003","商品扣库存失败");
+        }
         return true;
     }
 }
