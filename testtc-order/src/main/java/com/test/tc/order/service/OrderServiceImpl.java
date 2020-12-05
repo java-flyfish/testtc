@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     @GlobalTransactional
     @Transactional
     @Override
-    public Boolean creatrOrder(CreateOrderDto dto) {
+    public Boolean creatrOrder(CreateOrderDto dto) throws InterruptedException {
 
         //校验商品
         CheckProductDto checkProductDto = new CheckProductDto();
@@ -98,6 +98,8 @@ public class OrderServiceImpl implements OrderService {
         decrementSkuStockDto.setAmount(dto.getAmount());
         wareFeginClient.decrementSkuStock(decrementSkuStockDto);
 
+        Thread.sleep(10000);
+        int i = 1/0;
         return true;
     }
 }

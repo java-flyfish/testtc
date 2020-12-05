@@ -19,7 +19,7 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/createOrder")
-    public Result<Boolean> createOrder(@RequestBody @Valid CreateOrderDto dto){
+    public Result<Boolean> createOrder(@RequestBody @Valid CreateOrderDto dto) throws InterruptedException {
         Boolean b = orderService.creatrOrder(dto);
         return Result.success(b);
     }

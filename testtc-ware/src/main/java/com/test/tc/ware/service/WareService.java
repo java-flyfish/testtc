@@ -7,4 +7,7 @@ public interface WareService {
     Boolean ckeckWare(CheckWareDto dto);
 
     Boolean decrementSkuStock(DecrementSkuStockDto dto);
+
+    void addSkuStock();
+
 }
